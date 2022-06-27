@@ -25,6 +25,14 @@ func Start(host string, port int) {
 	if err := http.ListenAndServe(fmt.Sprintf("%s:%d", host, port), router); err != nil {
 		log.Fatal(err)
 	}
+	//router.HandleFunc("/task/", server.getAllTasksHandler).Methods("GET")
+	router.HandleFunc("/bad", handleRootBad).Methods("GET")
+
+}
+
+func handleRootBad(w http.ResponseWriter, r *http.Request) {
+	//http.Error(w, err.Error(), http.StatusNotFound)
+	http.Error(w, "bad", http.StatusNotFound)
 }
 
 //main /** starts program, gets HOST:PORT param and calls Start func.
