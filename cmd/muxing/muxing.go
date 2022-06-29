@@ -24,6 +24,7 @@ func Start(host string, port int) {
 	router.HandleFunc("/bad", ViewBad).Methods(http.MethodGet)
 	router.HandleFunc("/name/{param}", ViewName).Methods(http.MethodGet)
 	router.HandleFunc("/data", ViewPostParam).Methods(http.MethodPost)
+	router.HandleFunc("/headers", ViewPostHeaders).Methods(http.MethodPost)
 
 	log.Println(fmt.Printf("Starting API server on %s:%d\n", host, port))
 	if err := http.ListenAndServe(fmt.Sprintf("%s:%d", host, port), router); err != nil {
@@ -54,6 +55,16 @@ func ViewPostParam(w http.ResponseWriter, r *http.Request) {
 	resp := []byte("I got message:\n" + string(body))
 
 	w.Write(resp)
+	return
+}
+
+func ViewPostHeaders(w http.ResponseWriter, r *http.Request) {
+
+	a := r.Header.Get("a")
+	b := r.Header.Get("b")
+	aInt, _ := strconv.Atoi(a)
+	bInt, _ := strconv.Atoi(b)
+	w.Header().Add("a+b", strconv.Itoa(aInt+bInt))
 	return
 }
 
